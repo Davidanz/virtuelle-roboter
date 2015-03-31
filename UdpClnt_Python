@@ -1,0 +1,13 @@
+import socket
+
+UDP_IP = "141.82.50.192"
+UDP_PORT = 50000
+
+def send(befehl):
+	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
+	sock.sendto(MESSAGE, (UDP_IP, UDP_PORT)) #Befehl senden
+
+#Befehl / Geschwindigkeit / Achsen / x-Achse / y-Achse / z-Achse / 
+MESSAGE = "MOVE PTP 90.0 9    0.5 0.2 0.8 1.2 -3.14 1.57 0.0 -1.57 -3.14"
+
+send(MESSAGE)
