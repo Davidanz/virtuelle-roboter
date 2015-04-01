@@ -15,6 +15,9 @@ def send(befehl):
 	global lastPosition
 	lastPosition = getCurrentJointPosition()
 	sock.sendto(befehl, (UDP_IP, UDP_PORT)) #Befehl senden
+	rueckmeldung = receive()				#Wenn Rueckmeldung dann Ausprinten
+	if len(rueckmeldung) != 0:
+		print rueckmeldung
 	
 #Daten empfangen
 def receive():
@@ -39,8 +42,6 @@ def stepBack():
 MESSAGE = "MOVE PTP 90.0 9    0.8 0.2 0.8 1.2 -3.14 1.57 0.0 -1.57 -3.14"
 #Move-Befehl senden
 send(MESSAGE)
-#Empfange Rueckmeldung
-print receive()
 
 #Aktuelle Position Ausprinten
 print getCurrentJointPosition()
@@ -49,25 +50,18 @@ print getCurrentJointPosition()
 MESSAGE = "MOVE PTP 90.0 9    0.6 0.2 0.8 1.2 -3.14 1.57 0.0 -1.57 -3.14"
 #Move-Befehl senden
 send(MESSAGE)
-#Empfange Rueckmeldung
-print receive()
 
 #Schritt zurück
 stepBack()
-#Empfange Rueckmeldung
-print receive()
 
 #Neuer Befehl
 MESSAGE = "MOVE PTP 90.0 9    0.0 0.2 1.2 1.2 -3.14 1.57 0.0 -1.57 -3.14"
 #Move-Befehl senden
 send(MESSAGE)
-#Empfange Rueckmeldung
-print receive()
 
 #Schritt zurück
 stepBack()
-#Empfange Rueckmeldung
-print receive()
+
 
 
 
