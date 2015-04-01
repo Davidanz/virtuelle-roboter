@@ -1,0 +1,76 @@
+import socket
+
+UDP_IP = "141.82.50.192"
+UDP_PORT = 50000
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
+currentPostition = " "
+lastPosition = " "
+
+#CurrentJointPosition in MoveBefehl umwandeln
+def JointPositionToMoveCommand(jointPosition):
+	return "MOVE PTP 90.0 9     " + jointPosition
+
+#Daten senden
+def send(befehl):
+	global lastPosition
+	lastPosition = getCurrentJointPosition()
+	sock.sendto(befehl, (UDP_IP, UDP_PORT)) #Befehl senden
+	
+#Daten empfangen
+def receive():
+	 recv_data, addr = sock.recvfrom(UDP_PORT)
+	 return recv_data
+	 
+	 
+#akutelle Position des Virtuelle Roboters
+def getCurrentJointPosition():
+	global currentPosition
+	sock.sendto("GET CURRENTJOINTPOSITION", (UDP_IP, UDP_PORT)) #Befehl senden
+	currentPosition = receive()
+	return currentPosition
+
+#Schritt zurück
+def stepBack():
+	global lastPosition
+	send(JointPositionToMoveCommand(lastPosition))
+	
+
+#Befehl / Geschwindigkeit / Achsen / x-Achse / y-Achse / z-Achse / 
+MESSAGE = "MOVE PTP 90.0 9    0.8 0.2 0.8 1.2 -3.14 1.57 0.0 -1.57 -3.14"
+#Move-Befehl senden
+send(MESSAGE)
+#Empfange Rueckmeldung
+print receive()
+
+#Aktuelle Position Ausprinten
+print getCurrentJointPosition()
+
+#Neuer Befehl
+MESSAGE = "MOVE PTP 90.0 9    0.6 0.2 0.8 1.2 -3.14 1.57 0.0 -1.57 -3.14"
+#Move-Befehl senden
+send(MESSAGE)
+#Empfange Rueckmeldung
+print receive()
+
+#Schritt zurück
+stepBack()
+#Empfange Rueckmeldung
+print receive()
+
+#Neuer Befehl
+MESSAGE = "MOVE PTP 90.0 9    0.0 0.2 1.2 1.2 -3.14 1.57 0.0 -1.57 -3.14"
+#Move-Befehl senden
+send(MESSAGE)
+#Empfange Rueckmeldung
+print receive()
+
+#Schritt zurück
+stepBack()
+#Empfange Rueckmeldung
+print receive()
+
+
+
+
+
+
